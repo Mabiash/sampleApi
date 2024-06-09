@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Display Users</title>
+  <style>
+    /* Simple styling for the table */
+    table {
+      width: 50%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 18px;
+      text-align: left;
+    }
+
+    tr,
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="iptAndbtn" style="display: flex; flex-direction: column; width: 70%">
+    <label for="">name</label>
+    <input type="text" class="ipt1" />
+    <label for="">age</label>
+    <input type="text" class="ipt2" />
+    <label for="">section</label>
+    <input type="text" class="ipt3" />
+  </div>
+
+  <button class="btn" style="margin-top: 10px; padding: 10px 15px; background-color: teal">
+    Send
+  </button>
+  <h1>Users List</h1>
+  <table id="usersTable">
+    <thead>
+      <tr>
+        <th>Name</tr=h>
+        <th>Age</th>
+        <th>Section</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- User data will be inserted here -->
+    </tbody>
+  </table>
+
+  <script>
+    const ipt1 = document.querySelector(".ipt1");
+    const ipt2 = document.querySelector(".ipt2");
+    const ipt3 = document.querySelector(".ipt3");
+
+    const URLPostData = "https://deploy-nodeapi.onrender.com/api/user";
+    const URLGetData = "https://deploy-nodeapi.onrender.com/getUsers/";
+
+
+
+    const getUserDataById = async () => {
+      const URLGetDataById = `https://deploy-nodeapi.onrender.com/getUsers/${ipt1.value}`;
+      const data = await fetch(URLGetDataById);
+      const res = await data.json();
+      console.table(res.name);
+      
+        const usersTableBody = document.querySelector("#usersTable tbody");
+        const tableData = document.createElement("tr");
+
+        tableData.innerHTML = `
+            <td>${res.name}</td>
+            <td>${res.age}</td>
+            <td>${res.section}</td>
+            `;
+
+        usersTableBody.appendChild(tableData)
+    
+      
+    }
+
+    async function postData(insertToDabase) {
+      const data = await fetch(URLPostData, {
+        method: "POST",
+        body: JSON.stringify(insertToDabase),
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const getUserData = async () => {
+      const data = await fetch(URLGetData);
+      const response = await data.json();
+      //console.table(response)
+
+   
+    
+    };
+    const btn = document.querySelector(".btn");
+
+    btn.addEventListener("click", () => {
+      // const insertToDabase = {
+      //   name: ipt1.value,
+      //   age: ipt2.value,
+      //   section: ipt3.value,
+      // };
+
+
+      // postData(insertToDabase);
+      // alert(ipt1.value);
+
+
+      getUserDataById();
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      getUserData();
+    });
+  </script>
+</body>
+
+</html>
